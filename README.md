@@ -2,7 +2,7 @@
 	C - Simple Shell
 </h1>
 <p align="center">
-	<b><i>As beautiful as a shell.. </i></b><br>
+	<b><i>Where simplicity yields powerful control</i></b><br>
 </p>
 ------------------------------------------------------------------------------------------------------------------------------
 <h3>It’s time for the famous Simple Shell project.</h3>
