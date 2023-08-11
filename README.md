@@ -98,5 +98,5 @@ $
 <center--------------------------------------------------------------------------------------->
 	
 ## Authors:
-<a href="https://www.linkedin.com/in/KarimaTouhami/">Karima Touhami, </a>
+<a href="https://www.linkedin.com/KarimaTouhami/">Karima Touhami, </a>
 <a href="https://github.com/SaadM33">Saad Maaqili</a>
