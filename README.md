@@ -96,9 +96,7 @@ hsh main.c shell.c test_ls_2
 $
 ```
 <center--------------------------------------------------------------------------------------->
-# Authors:
-<a href="https://www.linkedin.com/in/KarimaTouhami/">Karima Touhami</a>
-	<span> · </span>
-	<a href="https://github.com/
-SaadM33">Saad Maaqili</a>
-	</h3>
+	
+## Authors:
+<a href="https://www.linkedin.com/in/KarimaTouhami/">Karima Touhami, </a>
+<a href="https://github.com/SaadM33">Saad Maaqili</a>
