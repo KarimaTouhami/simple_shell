@@ -16,8 +16,8 @@
 
 - Output:
 
-Unless specified otherwise, your program must have the exact same output as sh `(/bin/sh)` as well as the exact same error output.
-The only difference is when you print an error, the name of the program must be equivalent to your `argv[0]` (See below)
+Unless specified otherwise, our program must have the exact same output as sh `(/bin/sh)` as well as the exact same error output.
+The only difference is when we print an error, the name of the program must be equivalent to our `argv[0]` (See below)
 Example of error with `sh`:
 ```
 $ echo "qwerty" | /bin/sh
@@ -68,12 +68,12 @@ $
 - write (man 2 write)
 
 ## Compilation
-- Your shell will be compiled this way:
+- Our shell will be compiled this way:
 
 `gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh`
 
 ## Testing:
--Your shell should work like this in interactive mode:
+- Our shell should work like this in interactive mode:
 ```
 $ ./hsh
 ($) /bin/ls
