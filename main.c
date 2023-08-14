@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * @AUTORS: Karima Touhami.
+ * main - Entry point of the simple shell.
+ * Return: Always 0.
+ */
+*/
+
 int main(void)
 {
     char input[MAX_INPUT_LENGTH];
