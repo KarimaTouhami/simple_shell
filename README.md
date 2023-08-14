@@ -15,7 +15,7 @@
 - and Learning how to learn…
 
 
-<p>Output:</p> 
+**Output:**
 
 Unless specified otherwise, our program must have the exact same output as sh `(/bin/sh)` as well as the exact same error output.
 The only difference is when we print an error, the name of the program must be equivalent to our `argv[0]` (See below)
