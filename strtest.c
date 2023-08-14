@@ -1,4 +1,5 @@
 #include "main.h"
+
 /**
  * @AUTHOR: Karima Touhami
  * _strncat - concatenate two strings
