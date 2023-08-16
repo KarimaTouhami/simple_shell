@@ -68,12 +68,10 @@ void execute_command(char *command, char **args)
     }
     else if (pid > 0)
     {
-        // Parent process
         wait(NULL);
     }
     else
     {
-        // Fork failed
         perror("fork");
     }
 }
