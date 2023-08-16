@@ -1,11 +1,10 @@
 #include "main.h"
 
 /**
- * @AUTORS: Karima Touhami.
+ * @AUTHORS: Karima Touhami.
  * main - Entry point of the simple shell.
  * Return: Always 0.
  */
-*/
 
 int main(void)
 {
@@ -15,7 +14,7 @@ int main(void)
 
     while (1)
     {
-        printf("SimpleShell> ");
+        printf("$ ");
         fgets(input, sizeof(input), stdin);
 
         /* Remove the newline character from input */
