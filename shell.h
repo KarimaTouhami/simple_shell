@@ -11,6 +11,6 @@
 #define MAX_INPUT_LENGTH 1024
 #define MAX_ARGS 16
 
-void execute_command(char *command, char **args);
+void execute_command(char *command);
 
 #endif /* SHELL_H */
