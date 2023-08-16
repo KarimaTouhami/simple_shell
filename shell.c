@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * @AUTHOR: Karima Touhami.
+ * @AUTHORS: Karima Touhami.
  * main - Entry point of the shell program.
  *
  * Return: Always 0.
@@ -14,11 +14,17 @@ int main(void)
 
     while (1)
     {
-        printf(":) ");
-        fgets(input, MAX_INPUT_LENGTH, stdin);
+        write(STDOUT_FILENO, ":) ", 3);
+        ssize_t n_read = read(STDIN_FILENO, input, sizeof(input));
 
-        // Remove the newline character from the end of the input
-        input[strcspn(input, "\n")] = '\0';
+        if (n_read == 0)
+        {
+            write(STDOUT_FILENO, "\n", 1);
+            break; // End of file (Ctrl+D)
+        }
+
+        // Remove the newline character from input
+        input[n_read - 1] = '\0';
 
         int argCount = 0;
 
@@ -57,17 +63,17 @@ void execute_command(char *command, char **args)
     {
         // Child process
         execvp(command, args);
-        perror("execve"); // Print error if execvp fails
+        perror("execvp");
         _exit(1);
     }
     else if (pid > 0)
     {
         // Parent process
-        wait(NULL); // Wait for the child process to complete
+        wait(NULL);
     }
     else
     {
         // Fork failed
-        perror("folk");
+        perror("fork");
     }
 }
