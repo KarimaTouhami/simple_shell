@@ -104,5 +104,5 @@ $
 ```
 <center--------------------------------------------------------------------------------------->
 	
-## Authors:
+## The author:
 <a href="https://www.linkedin.com/in/karima-touhami-5b14b4268/">Karima Touhami</a>
