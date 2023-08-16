@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * @AUTHORS: Karima Touhami.
+ * @AUTHOR: Karima Touhami.
  * main - Entry point of the shell program.
  *
  * Return: Always 0.
@@ -14,21 +14,13 @@ int main(void)
 
     while (1)
     {
-        write(STDOUT_FILENO, "$ ", 3);
-        ssize_t n_read = read(STDIN_FILENO, input, sizeof(input));
+        printf("$ ");
+        fgets(input, sizeof(input), stdin);
 
-        if (n_read == 0)
-        {
-            write(STDOUT_FILENO, "\n", 1);
-            break; // End of file (Ctrl+D)
-        }
-
-        // Remove the newline character from input
-        input[n_read - 1] = '\0';
+        input[strcspn(input, "\n")] = '\0';
 
         int argCount = 0;
 
-        // Tokenize the input into arguments
         token = strtok(input, " ");
         while (token != NULL && argCount < MAX_ARGS - 1)
         {
@@ -44,7 +36,7 @@ int main(void)
         if (strcmp(args[0], "exit") == 0)
             exit(0);
 
-        execute_command(args[0], args);
+        execute_command(args[0]);
     }
 
     return 0;
@@ -53,17 +45,16 @@ int main(void)
 /**
  * execute_command - Execute a command with specified arguments.
  * @command: The command to execute.
- * @args: An array of arguments for the command.
  */
-void execute_command(char *command, char **args)
+void execute_command(char *command)
 {
     pid_t pid = fork();
 
     if (pid == 0)
     {
-        // Child process
+        char *args[] = {command, NULL};
         execvp(command, args);
-        perror("execvp");
+        perror("execvp"); 
         _exit(1);
     }
     else if (pid > 0)
