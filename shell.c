@@ -30,12 +30,10 @@ int main(void)
 
         if (pid == 0)
         {
-            /* Child process */
             args[0] = input;
             args[1] = NULL;
             execve(input, args, NULL);
 
-            /* If execve fails, print an error message and exit */
             perror("execve");
             _exit(EXIT_FAILURE);
         }
