@@ -2,11 +2,11 @@
 #define SHELL_H
 
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <stdio.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #define MAX_INPUT_LENGTH 1024
 #define MAX_ARGS 16
