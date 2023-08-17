@@ -8,61 +8,48 @@
  */
 int main(void)
 {
-    char input[MAX_INPUT_LENGTH];
-    char *args[MAX_ARGS];
-    char *token;
+	char input[MAX_INPUT_LENGTH];
+	char c;
+	char *args[2];
+	int i = 0;
 
-    while (1)
-    {
-        printf("$ ");
-        fgets(input, sizeof(input), stdin);
+	while (1)
+	{
+		i = 0;
+		write(STDOUT_FILENO, "$ ", 2);
 
-        input[strcspn(input, "\n")] = '\0';
+		while (read(STDIN_FILENO, &c, 1) > 0)
+		{
+			if (c == '\n' || i == MAX_INPUT_LENGTH - 1)
+				break;
+			input[i++] = c;
+		}
+		input[i] = '\0';
 
-        int argCount = 0;
+		pid_t pid = fork();
 
-        token = strtok(input, " ");
-        while (token != NULL && argCount < MAX_ARGS - 1)
-        {
-            args[argCount] = token;
-            argCount++;
-            token = strtok(NULL, " ");
-        }
-        args[argCount] = NULL;
+		if (pid == 0)
+		{
+			/* Child process */
+			args[0] = input;
+			args[1] = NULL;
+			execve(input, args, NULL);
 
-        if (argCount == 0)
-            continue; // Empty command, prompt again
+			/* If execve fails, print an error message and exit */
+			char error_msg[] = "Error\n";
+			write(STDERR_FILENO, error_msg, sizeof(error_msg) - 1);
+			_exit(EXIT_FAILURE);
+		}
+		else if (pid > 0)
+		{
+			wait(NULL);
+		}
+		else
+		{
+			char error_msg[] = "fork\n";
+			write(STDERR_FILENO, error_msg, sizeof(error_msg) - 1);
+		}
+	}
 
-        if (strcmp(args[0], "exit") == 0)
-            exit(0);
-
-        execute_command(args[0]);
-    }
-
-    return 0;
-}
-
-/**
- * execute_command - Execute a command with specified arguments.
- * @command: The command to execute.
- */
-void execute_command(char *command)
-{
-    pid_t pid = fork();
-
-    if (pid == 0)
-    {
-        char *args[] = {command, NULL};
-        execvp(command, args);
-        perror("execvp"); 
-        _exit(1);
-    }
-    else if (pid > 0)
-    {
-        wait(NULL);
-    }
-    else
-    {
-        perror("fork");
-    }
+	return 0;
 }
