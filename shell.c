@@ -9,8 +9,7 @@
 int main(void)
 {
     char input[MAX_INPUT_LENGTH];
-    char c;
-    char *args[2];
+    char *args[MAX_ARGS];
     int i = 0;
 
     while (1)
@@ -18,11 +17,11 @@ int main(void)
         i = 0;
         write(STDOUT_FILENO, "$ ", 2);
 
-        while (read(STDIN_FILENO, &c, 1) > 0)
+        while (read(STDIN_FILENO, &input[i], 1) > 0)
         {
-            if (c == '\n' || i == MAX_INPUT_LENGTH - 1)
+            if (input[i] == '\n' || i == MAX_INPUT_LENGTH - 1)
                 break;
-            input[i++] = c;
+            i++;
         }
         input[i] = '\0';
 
@@ -30,11 +29,20 @@ int main(void)
 
         if (pid == 0)
         {
-            args[0] = input;
-            args[1] = NULL;
-            execve(input, args, NULL);
+            int arg_count = 0;
+            args[arg_count++] = strtok(input, " \t\n");
 
-            perror("execve");
+            while ((args[arg_count] = strtok(NULL, " \t\n")) != NULL)
+            {
+                arg_count++;
+                if (arg_count >= MAX_ARGS - 1)
+                    break;
+            }
+            args[arg_count] = NULL;
+
+            execvp(args[0], args);
+
+            perror("execvp");
             _exit(EXIT_FAILURE);
         }
         else if (pid > 0)
