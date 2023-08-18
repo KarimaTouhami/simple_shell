@@ -6,6 +6,7 @@
  *
  * Return: Always 0.
  */
+
 int main(void)
 {
     char input[MAX_INPUT_LENGTH];
@@ -40,10 +41,24 @@ int main(void)
             }
             args[arg_count] = NULL;
 
-            execvp(args[0], args);
-
-            perror("execvp");
-            _exit(EXIT_FAILURE);
+            // Get the command's full path
+            char *cmd_path = get_path(args[0]);
+            if (cmd_path != NULL)
+            {
+                execve(cmd_path, args, NULL);
+                perror("execve");
+                free(cmd_path);
+                _exit(EXIT_FAILURE);
+            }
+            else
+            {
+                char error_message[] = "Command not found: ";
+                write(STDERR_FILENO, error_message, strlen(error_message));
+                write(STDERR_FILENO, args[0], strlen(args[0]));
+                write(STDERR_FILENO, "\n", 1);
+                free(cmd_path);
+                _exit(EXIT_FAILURE);
+            }
         }
         else if (pid > 0)
         {
