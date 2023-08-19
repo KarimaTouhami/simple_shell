@@ -39,6 +39,7 @@ int main(void)
             }
             args[arg_count] = NULL;
 
+            /* Get the command's full path */
             char *cmd_path = get_path(args[0]);
             if (cmd_path != NULL)
             {
