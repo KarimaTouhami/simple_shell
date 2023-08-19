@@ -28,11 +28,38 @@ int main(void)
 
         if (pid == 0)
         {
-            /* Child process code */
+            int arg_count = 0;
+            args[arg_count++] = strtok(input, " \t\n");
+
+            while ((args[arg_count] = strtok(NULL, " \t\n")) != NULL)
+            {
+                arg_count++;
+                if (arg_count >= MAX_ARGS - 1)
+                    break;
+            }
+            args[arg_count] = NULL;
+
+            char *cmd_path = get_path(args[0]);
+            if (cmd_path != NULL)
+            {
+                execve(cmd_path, args, NULL);
+                perror("execve");
+                free(cmd_path);
+                _exit(EXIT_FAILURE);
+            }
+            else
+            {
+                char error_message[] = "Command not found: ";
+                write(STDERR_FILENO, error_message, strlen(error_message));
+                write(STDERR_FILENO, args[0], strlen(args[0]));
+                write(STDERR_FILENO, "\n", 1);
+                free(cmd_path);
+                _exit(EXIT_FAILURE);
+            }
         }
         else if (pid > 0)
         {
-            /* Parent process code */
+            wait(NULL);
         }
         else
         {
