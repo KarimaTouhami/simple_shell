@@ -17,5 +17,6 @@
 #define PATH_MAX_LENGTH 1024
 
 void execute_command(char *command, char **args);
+void print_environment(void);
 
 #endif /* SHELL_H */
