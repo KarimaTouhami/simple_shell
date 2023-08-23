@@ -1,8 +1,8 @@
 #include "shell.h"
 /**
- * _strlen - Returns the length of a string (excluding the null terminator).
- * @str: The input string.
- * Return: The length of the string.
+ * _strlen - returns the length of a string
+ * @str: string to evaluate
+ * Return: the length of the string
  */
 int _strlen(char *str)
 {
