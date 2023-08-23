@@ -54,7 +54,6 @@ int main(void)
                 write(STDERR_FILENO, error_message, strlen(error_message));
                 write(STDERR_FILENO, args[0], strlen(args[0]));
                 write(STDERR_FILENO, "\n", 1);
-                free(cmd_path);
                 _exit(EXIT_FAILURE);
             }
         }
@@ -68,5 +67,5 @@ int main(void)
         }
     }
 
-    return (0);
+    return 0;
 }
