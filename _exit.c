@@ -1,32 +1,60 @@
 #include "shell.h"
+
 /**
- * my_exit - Frees memory and exits the program.
- * @input: Pointer to the input string.
- * @command: Pointer to the command string.
- * This function frees the memory allocated for the
- * input and command strings
- * and then exits the program with the status
- * returned by the status_exit() function.
+ * chernum -> exit
+ * @str: input
+ * Return: int
  */
 
-void my_exit(char *input, char *command)
+int chernum(const char *str)
 {
-	free(input);
-	free(command);
-	exit(exit_status(0, 0));
+	if (str == NULL || *str == '\0')
+		return (0);
+	while (*str)
+	{
+		if (*str < '0' || *str > '9')
+			return (0);
+		str++;
+	}
+	return (1);
 }
-/**
- * exit_status - Manages the exit status for a given action and new status
- * @action: The action to perform (1 for set, 0 for get)
- * @new_status: The new status to set
- * Return: The current exit status if action is 0,
- * or the new status if action is 1
- */
-int exit_status(int action, int new_status)
-{
-	static int status;
 
-	if (action == 1)
-		status = new_status;
-	return (status);
+/**
+ * h_exit -> exit
+ *
+ * @arg: input
+ * @status_exit: input
+ * @str: input
+ */
+
+void h_exit(char *arg[], char *str, int status_exit)
+{
+	int i = 0;
+	char *error = "./hsh: 1: exit: Illegal number: ";
+
+	if (arg[1])
+	{
+		if (arg[1][0] != '-' && chernum(arg[1]))
+			status_exit = atoi(arg[1]);
+		else
+		{
+			while (error[i])
+			{
+				write(STDERR_FILENO, &error[i], 1);
+				i++;
+			}
+			i = 0;
+			while (arg[1][i])
+			{
+				write(STDERR_FILENO, &arg[1][i], 1);
+				i++;
+			}
+			write(STDERR_FILENO, "\n", 1);
+			status_exit = 2;
+		}
+	}
+	else if (status_exit == -1)
+		status_exit = EXIT_SUCCESS;
+	free(str);
+	exit(status_exit);
 }
