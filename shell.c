@@ -1,66 +1,57 @@
 #include "shell.h"
 
+
 /**
- * main - main function of the shell
- * @ac: argument count
- * @av: argument vector
- * @env: environment variables
- * Return: 0 on success
+ * _input -> test the tab
+ * @str: input
+ * Return: 1
  */
 
-int main(int ac, char **av, char **env)
+int _input(char *str)
 {
-    char *buf = NULL;
-    size_t buf_size = 0;
-    ssize_t n_characters = 0;
-    int shell = 1;
-    (void)ac;
+	int i;
 
-    signal(SIGINT, sigint_handler);
-    while (shell)
-    {
-        if (isatty(STDIN_FILENO))
-        {
-            fflush(stdin);
-            write(STDOUT_FILENO, "$ ", 2);
-        }
-        n_characters = getline(&buf, &buf_size, stdin);
-        cut_string(buf);
-        if (n_characters == EOF)
-        {
-            if (isatty(STDIN_FILENO))
-                write(STDOUT_FILENO, "\n", 1);
-            break;
-        }
-        if (n_characters > 1)
-            buf[n_characters - 1] = '\0';
-        if (buf[0] == '\n')
-            continue;
-        handle_input(buf, env, av);
-        buf_size = 0;
-        buf = NULL;
-    }
-    free(buf);
-    return (0);
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if (str[i] != ' ' && str[i] != '\t')
+			return (0);
+	}
+	return (1);
 }
 
-/**
- * cut_string - cuts a string when #
- * @str: string to cut
- * Return: string cut
- */
-char *cut_string(char *str)
-{
-    int i = 0;
 
-    while (str[i] != '\0')
-    {
-        if (str[i] == '#')
-        {
-            str[i] = '\0';
-            break;
-        }
-        i++;
-    }
-    return (str);
+/**
+ * shell -> shell
+ */
+
+void shell(void)
+{
+	char *str = NULL, *arg[10], *arg1 = "/bin/", *commend;
+	size_t strlen = 0;
+	ssize_t len;
+	int status_exit = -1;
+
+	while ((len = _write(&str, &strlen)) != -1)
+	{
+		if (str[len - 1] == '\n')
+			str[len - 1] = '\0';
+		if (str[0] == '\0')
+			continue;
+		if (_input(str))
+			break;
+		if (strcmp(str, "env") == 0)
+		{
+			envar();
+			free(str);
+			free(commend);
+			exit(EXIT_SUCCESS);
+		}
+
+		_strtok(str, arg);
+		if (strcmp(arg[0], "exit") == 0)
+			h_exit(arg, str, status_exit);
+		_path(arg[0], arg1, &commend);
+		status_exit = run(arg, commend, str);
+	}
+	free(str);
 }
