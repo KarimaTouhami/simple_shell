@@ -9,11 +9,15 @@ extern char **environ;
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <stddef.h>
 #include <string.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <signal.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <limits.h>
 
 void prompt(void);
@@ -25,7 +29,7 @@ void sigquit_handler(int sig);
 void _puts(char *str);
 int _strncmp(const char *s1, const char *s2, size_t n);
 int _strcmp(char *s1, char *s2);
-int _strlen(char *s);
+int _strlen(char *p);
 char *find_path(void);
 char *_combine_path(const char *s1, const char *s2);
 char **split(char *path, char *del);
@@ -38,11 +42,12 @@ void my_exit(char *input, char *command);
 void env(void);
 int _input(char *str);
 
-int _printf(int fd, const char *format, ...);
-int _putchar(int fd, char c);
-int _print_string(int fd, char *s);
-int _strlenc(const char *s);
-int _print_int(int fd, int num);
-int _print_unsigned_int(int fd, unsigned int num);
+#define READ_SIZE 1024
+#define BUFSIZE 1024
+
+/* handle_path.c */
+char *get_path(char *cmd);
+char *make_path(char *path, char *cmd);
 
 #endif /* SHELL_H */
+
