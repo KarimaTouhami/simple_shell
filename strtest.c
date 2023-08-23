@@ -1,6 +1,6 @@
 #include "shell.h"
 /**
- * _strlen - Returns the length of a string.
+ * _strlen - Returns the length of a string (excluding the null terminator).
  * @str: The input string.
  * Return: The length of the string.
  */
