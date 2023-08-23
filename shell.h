@@ -52,5 +52,9 @@ char *make_path(char *path, char *cmd);
 /* edit_env.c */
 int len_env(char **env);
 
+/* cd.c */
+void my_cd(char **args);
+void change_directory(char **directories, char *command_name);
+
 #endif /* SHELL_H */
 
