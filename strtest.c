@@ -1,24 +1,19 @@
 #include "shell.h"
-
 /**
- * _strlen - Returns the length of a string.
- * @s: String to evaluate.
- *
- * Return: The length of the string.
+ * _strlen - Calculates the length of a string.
+ * @p: String to be evaluated.
+ * Return: Length of the string.
  */
-int _strlen(char *s)
+
+int _strlen(char *p)
 {
-    if (s == NULL)
-        return (0);
+	int i = 0;
 
-    int length = 0;
-    char *current = s;
-
-    while (*current != '\0')
-    {
-        length++;
-        current++;
-    }
-
-    return (length);
+	if (p == NULL)
+		return (0);
+	while (p[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
 }
