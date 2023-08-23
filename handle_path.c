@@ -6,28 +6,6 @@
  * Return: path
  */
 
-char *make_path(char *path, char *cmd)
-{
-    size_t path_len = strlen(path);
-    size_t cmd_len = strlen(cmd);
-
-    char *cmd_path = (char *)malloc(path_len + 1 + cmd_len + 1);
-    if (cmd_path == NULL)
-        return NULL;
-
-    strcpy(cmd_path, path);
-    strcat(cmd_path, "/");
-    strcat(cmd_path, cmd);
-
-    return cmd_path;
-}
-
-/**
- * get_path - gets the path of a command
- * @cmd: command to get the path of
- * Return: path of the command
- */
-
 char *get_path(char *cmd)
 {
     char *path = NULL;
@@ -61,7 +39,7 @@ char *get_path(char *cmd)
         if (stat(cmd_path, &st) == 0)
         {
             free(path_copy);
-            return cmd_path;
+            return cmd_path; // Do not free cmd_path here
         }
         free(cmd_path);
         token = strtok(NULL, ":");
