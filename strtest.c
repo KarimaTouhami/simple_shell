@@ -7,7 +7,7 @@
 int _strlen(char *str)
 {
     if (str == NULL)
-        return 0;
+        return (0);
 
     int length = 0;
     while (*str != '\0')
@@ -15,5 +15,5 @@ int _strlen(char *str)
         length++;
         str++;
     }
-    return length;
+    return (length);
 }
