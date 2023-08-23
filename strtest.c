@@ -1,16 +1,17 @@
 #include "shell.h"
 /**
+ * @AUTHOR: Karima Touhami.
  * _strlen - returns the length of a string
- * @s: string to evaluate
+ * @k: string to evaluate
  * Return: the length of the string
 */
-int _strlen(char *s)
+int _strlen(char *k)
 {
 	int i = 0;
 
-	if (s == NULL)
+	if (k == NULL)
 		return (0);
-	while (s[i] != '\0')
+	while (k[i] != '\0')
 	{
 		i++;
 	}
