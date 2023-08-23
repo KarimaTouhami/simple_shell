@@ -1,49 +1,19 @@
 #include "shell.h"
 /**
- * make_path - makes a path
- * @path: path to make
- * @cmd: command to add to path
- * Return: path
+ * find_path - Finds and returns the value of the "PATH" environment variable
+ * Return: A string containing the value of the "PATH" environment variable
  */
-
-char *get_path(char *cmd)
+char *find_path()
 {
-    char *path = NULL;
-    char *path_copy = NULL;
-    char *token = NULL;
-    char *cmd_path = NULL;
-    struct stat st;
+	int i = 0;
+	char *p = "PATH=";
+	int lenp = strlen(p);
 
-    if (stat(cmd, &st) == 0)
-        return strdup(cmd);
-
-    if (cmd == NULL)
-        return NULL;
-
-    if (cmd[0] == '/')
-    {
-        if (stat(cmd, &st) == 0)
-            return strdup(cmd);
-        return NULL;
-    }
-
-    path = getenv("PATH");
-    path_copy = strdup(path);
-    if (path_copy == NULL)
-        return NULL;
-
-    token = strtok(path_copy, ":");
-    while (token != NULL)
-    {
-        cmd_path = make_path(token, cmd);
-        if (stat(cmd_path, &st) == 0)
-        {
-            free(path_copy);
-            return cmd_path; // Do not free cmd_path here
-        }
-        free(cmd_path);
-        token = strtok(NULL, ":");
-    }
-    free(path_copy);
-    return NULL;
+	while (environ[i] != NULL)
+	{
+		if (strncmp(environ[i], p, lenp) == 0)
+			return (environ[i] + lenp);
+	i++;
+	}
+	return (0);
 }
