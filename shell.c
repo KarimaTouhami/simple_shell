@@ -1,71 +1,58 @@
 #include "shell.h"
-
 /**
- * main - Entry point of the shell program.
- *
- * Return: Always 0.
+ * executable - Executes the appropriate action based on the command.
+ * @input: Pointer to the input string.
+ * @command: Pointer to the command string.
+ * Return: void
+ */
+void  executable(char *input, char *command)
+{
+	if (_strcmp(command, "exit") == 0)
+		my_exit(input, command);
+	else if (_strcmp(command, "env") == 0)
+		env();
+	else
+		run_cmd(input);
+}
+/**
+ * main - Entry point of the program
+ * Return: Always 0 (success)
  */
 int main(void)
 {
-    char input[MAX_INPUT_LENGTH];
-    char *args[MAX_ARGS];
-    int i = 0;
+	char *input;
+	char *args[MAX_ARGS];
+	size_t bufsize = 0;
+	ssize_t characters;
 
-    while (1)
-    {
-        i = 0;
-        write(STDOUT_FILENO, "$ ", 2);
-
-        while (read(STDIN_FILENO, &input[i], 1) > 0)
-        {
-            if (input[i] == '\n' || i == MAX_INPUT_LENGTH - 1)
-                break;
-            i++;
-        }
-        input[i] = '\0';
-
-        pid_t pid = fork();
-
-        if (pid == 0)
-        {
-            int arg_count = 0;
-            args[arg_count++] = strtok(input, " \t\n");
-
-            while ((args[arg_count] = strtok(NULL, " \t\n")) != NULL)
-            {
-                arg_count++;
-                if (arg_count >= MAX_ARGS - 1)
-                    break;
-            }
-            args[arg_count] = NULL;
-
-            /* Get the command's full path */
-            char *cmd_path = get_path(args[0]);
-            if (cmd_path != NULL)
-            {
-                execve(cmd_path, args, NULL);
-                perror("execve");
-                free(cmd_path);
-                _exit(EXIT_FAILURE);
-            }
-            else
-            {
-                char error_message[] = "Command not found: ";
-                write(STDERR_FILENO, error_message, strlen(error_message));
-                write(STDERR_FILENO, args[0], strlen(args[0]));
-                write(STDERR_FILENO, "\n", 1);
-                _exit(EXIT_FAILURE);
-            }
-        }
-        else if (pid > 0)
-        {
-            wait(NULL);
-        }
-        else
-        {
-            perror("fork");
-        }
-    }
-
-    return 0;
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigquit_handler);
+	while (1)
+	{
+		prompt();
+		input = NULL;
+		characters = getline(&input, &bufsize, stdin);
+		if (characters == -1)
+		{
+			free(input);
+			exit(0);
+		}
+		if (!*(input + 1))
+		{
+			free(input);
+			continue;
+		}
+		parse_input(_strdup(input), args);
+		if (!args[0])
+		{
+			free(input);
+			continue;
+		}
+		executable(input, args[0]);
+		free(args[0]);
+		free(input);
+		input = NULL;
+		bufsize = 0;
+	}
+	return (exit_status(0, 0));
 }
