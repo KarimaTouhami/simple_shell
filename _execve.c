@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 
 /**
  * run -> forks a child process and runs the specified command
