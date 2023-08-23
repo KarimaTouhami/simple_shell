@@ -1,6 +1,5 @@
 #include "shell.h"
 /**
- * @AUTHOR: Karima Touhami.
  * _strlen - returns the length of a string
  * @k: string to evaluate
  * Return: the length of the string
