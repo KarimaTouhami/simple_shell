@@ -1,58 +1,57 @@
 #include "shell.h"
-/**
- * executable - Executes the appropriate action based on the command.
- * @input: Pointer to the input string.
- * @command: Pointer to the command string.
- * Return: void
- */
-void  executable(char *input, char *command)
-{
-	if (_strcmp(command, "exit") == 0)
-		my_exit(input, command);
-	else if (_strcmp(command, "env") == 0)
-		env();
-	else
-		run_cmd(input);
-}
-/**
- * main - Entry point of the program
- * Return: Always 0 (success)
- */
-int main(void)
-{
-	char *input;
-	char *args[MAX_ARGS];
-	size_t bufsize = 0;
-	ssize_t characters;
 
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, sigquit_handler);
-	while (1)
+
+/**
+ * _input -> test the tab
+ * @str: input
+ * Return: 1
+ */
+
+int _input(char *str)
+{
+	int i;
+
+	for (i = 0; str[i] != '\0'; i++)
 	{
-		prompt();
-		input = NULL;
-		characters = getline(&input, &bufsize, stdin);
-		if (characters == -1)
-		{
-			free(input);
-			exit(0);
-		}
-		if (!*(input + 1))
-		{
-			free(input);
-			continue;
-		}
-		parse_input(_strdup(input), args);
-		if (!args[0])
-		{
-			free(input);
-			continue;
-		}
-		executable(input, args[0]);
-		free(args[0]);
-		free(input);
-		input = NULL;
-		bufsize = 0;
+		if (str[i] != ' ' && str[i] != '\t')
+			return (0);
 	}
-	return (exit_status(0, 0));
+	return (1);
+}
+
+
+/**
+ * shell -> shell
+ */
+
+void shell(void)
+{
+	char *str = NULL, *arg[10], *arg1 = "/bin/", *commend;
+	size_t strlen = 0;
+	ssize_t len;
+	int status_exit = -1;
+
+	while ((len = _write(&str, &strlen)) != -1)
+	{
+		if (str[len - 1] == '\n')
+			str[len - 1] = '\0';
+		if (str[0] == '\0')
+			continue;
+		if (_input(str))
+			break;
+		if (strcmp(str, "env") == 0)
+		{
+			envar();
+			free(str);
+			free(commend);
+			exit(EXIT_SUCCESS);
+		}
+
+		_strtok(str, arg);
+		if (strcmp(arg[0], "exit") == 0)
+			h_exit(arg, str, status_exit);
+		_path(arg[0], arg1, &commend);
+		status_exit = run(arg, commend, str);
+	}
+	free(str);
 }
