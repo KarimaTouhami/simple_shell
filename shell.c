@@ -1,57 +1,67 @@
 #include "shell.h"
 
-
 /**
- * _input -> test the tab
- * @str: input
- * Return: 1
+ * main - main function of the shell
+ * @ac: argument count
+ * @av: argument vector
+ * @env: environment variables
+ * Return: 0 on success
  */
 
-int _input(char *str)
+int main(int ac, char **av, char **env)
 {
-	int i;
+	char *buf = NULL;
+	size_t buf_size = 0;
+	int n_characters = 0;
+	int shell = 1;
+	(void)ac;
 
-	for (i = 0; str[i] != '\0'; i++)
+	signal(SIGINT, sigint_handler);
+	while (shell)
 	{
-		if (str[i] != ' ' && str[i] != '\t')
-			return (0);
+		if (isatty(STDIN_FILENO))
+		{
+			fflush(stdin);
+			write(STDOUT_FILENO, "$ ", 2);
+		}
+		n_characters = _getline(&buf, &buf_size, STDIN_FILENO);
+		cut_string(buf);
+		if (n_characters == EOF)
+		{
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 1);
+			break;
+		}
+		if (n_characters > 1)
+			buf[n_characters - 1] = '\0';
+		if (buf[0] == '\n')
+			continue;
+		handle_input(buf, env, av);
+		buf_size = 0;
+		buf = NULL;
 	}
-	return (1);
+	free(buf);
+	return (0);
 }
 
-
 /**
- * shell -> shell
+ * cut_string - cuts a string when #
+ * @str: string to cut
+ * Return: string cut
  */
 
-void shell(void)
+char *cut_string(char *str)
 {
-	char *str = NULL, *arg[10], *arg1 = "/bin/", *commend;
-	size_t strlen = 0;
-	ssize_t len;
-	int status_exit = -1;
+	int i = 0;
 
-	while ((len = _write(&str, &strlen)) != -1)
+	while (str[i] != '\0')
 	{
-		if (str[len - 1] == '\n')
-			str[len - 1] = '\0';
-		if (str[0] == '\0')
-			continue;
-		if (_input(str))
-			break;
-		if (strcmp(str, "env") == 0)
+		if (str[i] == '#')
 		{
-			envar();
-			free(str);
-			free(commend);
-			exit(EXIT_SUCCESS);
+			str[i] = '\0';
+			break;
 		}
-
-		_strtok(str, arg);
-		if (strcmp(arg[0], "exit") == 0)
-			h_exit(arg, str, status_exit);
-		_path(arg[0], arg1, &commend);
-		status_exit = run(arg, commend, str);
+		i++;
 	}
-	free(str);
+	return (str);
 }
