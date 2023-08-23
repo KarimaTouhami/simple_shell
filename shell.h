@@ -1,60 +1,23 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#define MAX_INPUT 1024
-#define MAX_ARGS 10
-extern char **environ;
-
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/wait.h>
+#include <stdint.h>
 #include <sys/types.h>
-#include <stddef.h>
-#include <string.h>
-#include <signal.h>
-#include <stdarg.h>
-#include <errno.h>
-#include <signal.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <limits.h>
+#include <sys/wait.h>
 
-void prompt(void);
-void read_input(char *input);
-void parse_input(char *, char **);
-void execute_command(char *command, char **args);
-void sigint_handler(int sig);
-void sigquit_handler(int sig);
-void _puts(char *str);
-int _strncmp(const char *s1, const char *s2, size_t n);
-int _strcmp(char *s1, char *s2);
-int _strlen(char *p);
-char *find_path(void);
-char *_combine_path(const char *s1, const char *s2);
-char **split(char *path, char *del);
-int run_cmd(char *line);
-char *_strdup(char *str);
-int cmd_helper(char **pathsp, char **splitted);
-void free_2d_array(char **ptr);
-int exit_status(int action, int new_status);
-void my_exit(char *input, char *command);
-void env(void);
-int _input(char *str);
+extern char **environ;
 
-#define READ_SIZE 1024
-#define BUFSIZE 1024
+void shell(void);
+ssize_t read_cmd(char **line, size_t *len);
+int _strtok(char *line, char **arg);
+void _path(char *bin, char *path, char **full);
+int run(char **arg, char *full, char *line);
+void h_exit(char *arg[], char *str, int status_exit);
+ssize_t _write(char **line, size_t *len);
+void envar(void);
 
-/* handle_path.c */
-char *get_path(char *cmd);
-char *make_path(char *path, char *cmd);
-
-/* edit_env.c */
-int len_env(char **env);
-
-/* cd.c */
-void my_cd(char **args);
-void change_directory(char **directories, char *command_name);
-
-#endif /* SHELL_H */
-
+#endif
