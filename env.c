@@ -1,52 +1,45 @@
 #include "shell.h"
 
 /**
- * _getenv - gets the environment variable
- * @key: key to get the value of
- * Return: value of the environment variable
+ * envar - prints the environment variables
  */
 
-char *_getenv(char *key)
+void envar(void)
 {
-	unsigned int i = 0;
-	char *path;
-	char **env;
-	int count = 0, j = 0;
+	char **env = environ;
 
-	while (environ[count])
-		count++;
-
-	env = malloc(sizeof(char *) * (count + 1));
-
-	for (j = 0; j < count; j++)
-		env[j] = _strdup(environ[j]);
-
-	env[count] = NULL;
-
-	while (env[i])
+	while (*env != NULL)
 	{
-		path = strtok(env[i], "=");
-		if (_strcmp(key, env[i]) == 0)
-		{
-			path = strtok(NULL, "\n");
-			return (path);
-		}
-		i++;
+		printf("%s\n", *env);
+		env++;
 	}
-	return (NULL);
 }
 
 /**
- * len_env - gets the length of the environment
- * @env: environment
- * Return: length of the environment
+ * _write -> constructs a full path for an executable
+ *
+ * @line: input
+ * @len: input
+ * Return: 1
  */
 
-int len_env(char **env)
+ssize_t _write(char **line, size_t *len)
 {
-	int i = 0;
+	ssize_t read = 0;
 
-	while (env[i])
-		i++;
-	return (i);
+	if (isatty(STDIN_FILENO))
+	{
+		write(1, "($) ", 4);
+	}
+	read = getline(line, len, stdin);
+	if (read == -1)
+	{
+		if (!isatty(STDIN_FILENO))
+		{
+			return (-1);
+		}
+		free(line);
+		exit(EXIT_FAILURE);
+	}
+	return (read);
 }
