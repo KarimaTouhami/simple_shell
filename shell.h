@@ -49,5 +49,8 @@ int _input(char *str);
 char *get_path(char *cmd);
 char *make_path(char *path, char *cmd);
 
+/* edit_env.c */
+int len_env(char **env);
+
 #endif /* SHELL_H */
 
